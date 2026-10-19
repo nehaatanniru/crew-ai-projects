@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neha · CrewAI Projects</title>
+<style>
+  :root {
+    --ink: #111111;
+    --soft: #6b6b6b;
+    --line: #e8e8e8;
+    --paper: #ffffff;
+    --accent: #d9480f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.65;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 72px 20px 80px; }
+
+  /* ---- Intro ---- */
+  .eyebrow {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.8rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+  h1 {
+    font-size: 2.6rem;
+    font-weight: 400;
+    line-height: 1.15;
+    margin: 10px 0 18px;
+  }
+  .intro { color: var(--soft); font-size: 1.05rem; max-width: 560px; }
+  .by {
+    margin-top: 22px;
+    font-family: system-ui, "Segoe UI", sans-serif;
+    font-size: 0.9rem;
+  }
+  .by a { color: var(--ink); }
+
+  /* ---- Filter ---- */
+  .filter {
+    display: flex;
+    gap: 22px;
+    margin: 56px 0 8px;
+    border-bottom: 1px solid var(--line);
+    font-family: system-ui, "Segoe UI", sans-serif;
+    font-size: 0.9rem;
+  }
+  .filter button {
+    background: none;
+    border: none;
+    padding: 10px 0;
+    cursor: pointer;
+    font: inherit;
+    color: var(--soft);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+  .filter button.on { color: var(--ink); border-bottom-color: var(--accent); }
+
+  /* ---- Project list ---- */
+  .item {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 6px 16px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .num {
+    font-family: Consolas, "Courier New", monospace;
+    color: var(--soft);
+    font-size: 0.9rem;
+    padding-top: 4px;
+  }
+  .item h2 { font-size: 1.3rem; font-weight: 400; }
+  .kind {
+    font-family: system-ui, "Segoe UI", sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-left: 8px;
+  }
+  .desc { color: var(--soft); margin: 4px 0 12px; }
+  .structure {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.8rem;
+    color: var(--ink);
+    background: #fafafa;
+    border-left: 2px solid var(--accent);
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    overflow-x: auto;
+    white-space: pre;
+    line-height: 1.7;
+  }
+  .structure .d { color: var(--accent); }
+  .structure .c { color: var(--soft); }
+  .links { font-family: system-ui, "Segoe UI", sans-serif; font-size: 0.9rem; }
+  .links a { color: var(--ink); margin-right: 18px; text-underline-offset: 3px; }
+  .links a:hover { color: var(--accent); }
+  .item > div:last-child { grid-column: 2; }
+
+  footer {
+    margin-top: 48px;
+    font-family: system-ui, "Segoe UI", sans-serif;
+    font-size: 0.85rem;
+    color: var(--soft);
+  }
+  footer a { color: var(--soft); }
+
+  @media (max-width: 520px) {
+    h1 { font-size: 2rem; }
+    .item { grid-template-columns: 1fr; }
+    .item > div:last-child { grid-column: 1; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">// agentic ai course</div>
+    <h1>Ten projects with<br>CrewAI agents.</h1>
+    <p class="intro">Four crews where agents share one task, and six flows where steps listen, route and branch. Built on Google Colab.</p>
+    <p class="by">Neha · MCA, VNRVJIET · <a href="https://github.com/nehaatanniru" target="_blank">github.com/nehaatanniru</a></p>
+  </header>
+
+  <nav class="filter">
+    <button class="on" data-show="all">All (10)</button>
+    <button data-show="crew">Crews (4)</button>
+    <button data-show="flow">Flows (6)</button>
+  </nav>
+
+  <section id="list"></section>
+
+  <footer>
+    Source notebooks: <a href="https://github.com/nehaatanniru/crew-ai-projects" target="_blank">github.com/nehaatanniru/crew-ai-projects</a>
+  </footer>
+</div>
+
+<script>
+  const REPO = "nehaatanniru/crew-ai-projects";
+
+  // structure: lines of the diagram. [d]...[/d] = decorator colour, [c]...[/c] = comment colour
+  const projects = [
+    { n: 1, type: "crew", title: "Blog Post Writer", file: "project_1&2.ipynb",
+      desc: "Researches a topic with web search, writes a blog post, edits it, and saves it to a file.",
+      structure: [
+        "[d]Process.sequential[/d]",
+        "Research Analyst → Blog Writer → Editor",
+        "[c]tools: DuckDuckGo search, FileWriterTool[/c]" ] },
+
+    { n: 2, type: "crew", title: "Competitor Analysis", file: "project_1&2.ipynb",
+      desc: "Scrapes competitor sites, compares pricing, follows news, and writes a SWOT analysis.",
+      structure: [
+        "[d]Process.hierarchical[/d]  [c]# a manager delegates[/c]",
+        "Website Scraper · Pricing Analyst · News Analyst",
+        "        ↘  Strategist  →  SWOT" ] },
+
+    { n: 3, type: "crew", title: "Meeting Notes", file: "project_3.ipynb",
+      desc: "Reads a transcript file and produces a summary, action items, a decision log and clean notes.",
+      structure: [
+        "[d]Process.sequential[/d]",
+        "Summarizer → Action Tracker → Decision Logger → Formatter",
+        "[c]tools: FileReadTool(transcript.txt), FileWriterTool[/c]" ] },
+
+    { n: 4, type: "crew", title: "Data Report", file: "project_4.ipynb",
+      desc: "Computes sales statistics with a custom tool and a Pydantic model, then writes and reviews insights.",
+      structure: [
+        "[d]Process.sequential[/d]",
+        "Data Analyst → Insight Writer → Report Reviewer",
+        "[c]tools: @tool sales_stats_tool(sales.csv), SalesStats(BaseModel)[/c]" ] },
+
+    { n: 5, type: "flow", title: "Customer Support", file: "project_5.ipynb",
+      desc: "Receives a ticket, sorts it into a category, sends it to the right handler, and resolves it.",
+      structure: [
+        "[d]@start[/d]   receive_ticket",
+        "[d]@listen[/d]  categorize_ticket",
+        "[d]@router[/d]  billing | account_access | refund | other",
+        "[d]@listen(or_)[/d] resolve_ticket" ] },
+
+    { n: 6, type: "flow", title: "Resume Screening", file: "project_6.ipynb",
+      desc: "Scores a resume, then shortlists it with a recruiter summary or drafts a polite rejection.",
+      structure: [
+        "[d]@start[/d]   load_resume",
+        "[d]@listen[/d]  score_resume",
+        "[d]@router[/d]  shortlist → Technical Recruiter",
+        "          reject    → draft_rejection",
+        "[d]@listen(or_)[/d] save_results" ] },
+
+    { n: 7, type: "flow", title: "Bug Triage", file: "project_7.ipynb",
+      desc: "Reads an issue, decides if it is a bug, a feature request or a question, and replies through the right role.",
+      structure: [
+        "[d]@start[/d]   read_issue",
+        "[d]@listen[/d]  classify_issue",
+        "[d]@router[/d]  bug → QA Engineer",
+        "          feature → Product Manager",
+        "          question → Support Agent",
+        "[d]@listen(or_)[/d] post_reply" ] },
+
+    { n: 8, type: "flow", title: "Content Repurposing", file: "project_8.ipynb",
+      desc: "Pulls key points from one article and writes three platform versions at the same time.",
+      structure: [
+        "[d]@start[/d]   load_article",
+        "[d]@listen[/d]  extract_points",
+        "  ├─ write_linkedin",
+        "  ├─ write_twitter       [c]# run in parallel[/c]",
+        "  └─ write_newsletter",
+        "[d]@listen(and_)[/d] publish_pack  [c]# waits for all three[/c]" ] },
+
+    { n: 9, type: "flow", title: "Lead Qualification", file: "project_9.ipynb",
+      desc: "Scrapes a lead's website for context, scores it, and picks outreach, nurture or archive.",
+      structure: [
+        "[d]@start[/d]   capture_lead",
+        "[d]@listen[/d]  enrich_lead  [c]# Business Researcher + ScrapeWebsiteTool[/c]",
+        "[d]@router[/d]  hot → send_outreach | warm → nurture | cold → archive",
+        "[d]@listen(or_)[/d] log_lead" ] },
+
+    { n: 10, type: "flow", title: "Approval Report", file: "project_10.ipynb",
+      desc: "Researches and drafts a report, waits for a human reviewer, and revises until it is approved.",
+      structure: [
+        "[d]@start[/d]   collect_topic",
+        "[d]@listen[/d]  research → write_report",
+        "[d]@human_feedback[/d] review_draft",
+        "   approved → publish_report",
+        "   revise   → revise_report  [c]# loops back to review[/c]" ] }
+  ];
+
+  // Turn the [d]/[c] markers into coloured spans
+  function paint(line) {
+    return line
+      .replace(/\[d\]/g, '<span class="d">').replace(/\[\/d\]/g, "</span>")
+      .replace(/\[c\]/g, '<span class="c">').replace(/\[\/c\]/g, "</span>");
+  }
+
+  function item(p) {
+    // encodeURIComponent turns "&" in "project_1&2" into "%26" so the link works
+    const path = encodeURIComponent(p.file);
+    const gh = `https://github.com/${REPO}/blob/main/${path}`;
+    const colab = `https://colab.research.google.com/github/${REPO}/blob/main/${path}`;
+    return `
+      <article class="item" data-type="${p.type}">
+        <div class="num">${String(p.n).padStart(2, "0")}</div>
+        <div>
+          <h2>${p.title}<span class="kind">${p.type}</span></h2>
+          <p class="desc">${p.desc}</p>
+          <div class="structure">${p.structure.map(paint).join("\n")}</div>
+          <div class="links">
+            <a href="${gh}" target="_blank" rel="noopener">View notebook</a>
+            <a href="${colab}" target="_blank" rel="noopener">Open in Colab</a>
+          </div>
+        </div>
+      </article>`;
+  }
+
+  document.getElementById("list").innerHTML = projects.map(item).join("");
+
+  // Filter buttons: show all, only crews, or only flows
+  document.querySelectorAll(".filter button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".filter button").forEach(b => b.classList.remove("on"));
+      btn.classList.add("on");
+      const show = btn.dataset.show;
+      document.querySelectorAll(".item").forEach(el => {
+        el.style.display = (show === "all" || el.dataset.type === show) ? "" : "none";
+      });
+    });
+  });
+</script>
+</body>
+</html>
