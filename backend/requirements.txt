@@ -1,0 +1,3 @@
+crewai[google-genai]
+fastapi
+uvicorn
