@@ -1,3 +1,5 @@
 crewai[google-genai]
+crewai-tools
+ddgs
 fastapi
 uvicorn
